@@ -20,3 +20,6 @@ Project Uni is a community-built Synthetic Intelligence ecosystem and public web
 3. Write the final story and copy.
 4. Implement the approved experience.
 5. Polish, test, and launch.
+ 
+EOF
+)
