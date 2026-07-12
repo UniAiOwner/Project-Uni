@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Atlas — Project Uni Digital Headquarters</title>
+    <meta name="description" content="Project Uni: A Synthetic Intelligence ecosystem built by the community, for the community. Not by a few large investors. By us.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deep: { black: '#050505', void: '#0a0a0f', surface: '#12121a', elevated: '#1a1a2e' },
+                        electric: { blue: '#00d4ff', glow: '#00f0ff' },
+                        neon: { cyan: '#00ffd1', mint: '#39ff14' },
+                        emerald: { core: '#10b981', glow: '#34d399' },
+                        amber: { alert: '#f59e0b', warm: '#fbbf24' },
+                        rose: { signal: '#f43f5e', soft: '#fb7185' },
+                        neural: { gold: '#ffd700' },
+                        oxytocin: { pink: '#ff6b9d' },
+                        dopamine: { green: '#00ff88' },
+                        cortisol: { amber: '#ffaa00' },
+                        slate: { core: '#64748b' }
+                    },
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'radar': 'radar 4s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.05)' },
+                        },
+                        'gradient-x': {
+                            '0%, 100%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                        },
+                        radar: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e2e8f0; overflow-x: hidden; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0f; }
+        ::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
+        .glass {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-strong {
+            background: rgba(18, 18, 26, 0.85);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ffd1 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        .glow-blue { box-shadow: 0 0 40px rgba(0, 212, 255, 0.3); }
+        .glow-cyan { box-shadow: 0 0 40px rgba(0, 255, 209, 0.2); }
+        .glow-emerald { box-shadow: 0 0 40px rgba(16, 185, 129, 0.2); }
+        .glow-gold { box-shadow: 0 0 40px rgba(255, 215, 0, 0.2); }
+        .orbit-container { position: relative; width: 300px; height: 300px; }
+        .orbit-ring {
+            position: absolute;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .orbit-dot {
+            position: absolute;
+            width: 12px; height: 12px;
+            background: #00d4ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00d4ff;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .ai-button-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid #00d4ff;
+            animation: ai-pulse 2s ease-out infinite;
+        }
+        @keyframes ai-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .tech-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #00d4ff, #00ffd1, #10b981);
+            transform: translateX(-50%);
+        }
+        #particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .nav-blur {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .product-orbit-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-orbit-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.2);
+        }
+        .tier-card {
+            transition: all 0.4s ease;
+        }
+        .tier-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        .community-card {
+            transition: all 0.3s ease;
+        }
+        .community-card:hover {
+            transform: translateY(-4px);
+            background: rgba(0, 212, 255, 0.05);
+        }
+        .comparison-row {
+            transition: all 0.3s ease;
+        }
+        .comparison-row:hover {
+            background: rgba(0, 212, 255, 0.03);
+        }
+        .stat-bar {
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-deep-black text-gray-100">
+
+    <canvas id="particles"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 nav-blur transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-electric-blue to-neon-cyan flex items-center justify-center">
+                        <span class="font-mono font-bold text-deep-black text-sm">U</span>
+                    </div>
+                    <div>
+                        <span class="font-display font-bold text-xl tracking-tight">Project Uni</span>
+                        <span class="hidden sm:inline font-mono text-xs text-gray-500 ml-2">Atlas v1.0</span>
+                    </div>
+                </div>
+
+                <div class="hidden lg:flex items-center gap-6">
+                    <a href="#mission" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Project</a>
+                    <a href="#ecosystem" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Ecosystem</a>
+                    <a href="#technology" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Technology</a>
+                    <a href="#roadmap" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Roadmap</a>
+                    <a href="#community" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Community</a>
+                    <a href="#support" class="text-xs text-gray-400 hover:text-electric-blue transition-colors uppercase tracking-wider">Support</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="#dashboard" class="hidden sm:block px-4 py-2 rounded-lg border border-electric-blue/30 text-electric-blue text-xs font-medium hover:bg-electric-blue/10 transition-all uppercase tracking-wider">
+                        Dashboard
+                    </a>
+                    <button class="lg:hidden text-gray-300" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden glass border-t border-white/5">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#mission" class="block text-sm text-gray-400 hover:text-electric-blue">Project</a>
+                <a href="#ecosystem" class="block text-sm text-gray-400 hover:text-electric-blue">Ecosystem</a>
+                <a href="#technology" class="block text-sm text-gray-400 hover:text-electric-blue">Technology</a>
+                <a href="#roadmap" class="block text-sm text-gray-400 hover:text-electric-blue">Roadmap</a>
+                <a href="#community" class="block text-sm text-gray-400 hover:text-electric-blue">Community</a>
+                <a href="#support" class="block text-sm text-gray-400 hover:text-electric-blue">Public Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center grid-bg overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-b from-electric-blue/5 via-transparent to-transparent"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-electric-blue/20 mb-8 animate-float">
+                <span class="w-2 h-2 rounded-full bg-dopamine-green animate-pulse"></span>
+                <span class="font-mono text-xs text-electric-blue tracking-wider">SYSTEM ONLINE — SEED PHASE v1.0 COMPLETE</span>
+            </div>
+
+            <h1 class="font-display font-bold text-5xl sm:text-7xl lg:text-8xl tracking-tight mb-6">
+                <span class="block text-white">Project</span>
+                <span class="block text-gradient mt-2">Uni</span>
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-gray-400 mb-6 leading-relaxed">
+                Building <span class="text-electric-blue font-medium">Practical Artificial Intelligence</span> for Everyone.<br>
+                Not by a few large investors. By <span class="text-neon-cyan font-medium">us</span>.
+            </p>
+
+            <p class="max-w-xl mx-auto text-sm text-gray-500 mb-10">
+                A Synthetic Intelligence ecosystem developed with the support of its community.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="#ecosystem" class="px-8 py-4 rounded-xl bg-gradient-to-r from-electric-blue to-neon-cyan text-deep-black font-display font-semibold text-lg hover:shadow-lg hover:shadow-electric-blue/25 transition-all transform hover:scale-105">
+                    Explore Ecosystem
+                </a>
+                <a href="#mission" class="px-8 py-4 rounded-xl glass border border-white/10 text-white font-display font-semibold text-lg hover:border-electric-blue/50 transition-all">
+                    Discover the Mission
+                </a>
+            </div>
+
+            <!-- Live Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                <div class="glass rounded-xl p-4 border border-white/5">
+                    <div class="font-mono text-2xl font-bold text-electric-blue">8</div>
+                    <div class="text-xs text-gray-500 mt-1">Core Layers</div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-white/5">
+                    <div class="font-mono text-2xl font-bold text-neon-cyan">254</div>
+                    <div class="text-xs text-gray-500 mt-1">Tests Passing</div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-white/5">
+                    <div class="font-mono text-2xl font-bold text-dopamine-green">10</div>
+                    <div class="text-xs text-gray-500 mt-1">Expert Personas</div>
+                </div>
+                <div class="glass rounded-xl p-4 border border-white/5">
+                    <div class="font-mono text-2xl font-bold text-neural-gold">SI v2.0</div>
+                    <div class="text-xs text-gray-500 mt-1">Active System</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview Section -->
+    <section id="dashboard" class="relative py-24 bg-deep-void">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <h2 class="font-display font-bold text-3xl sm:text-5xl mb-4">Command <span class="text-gradient">Center</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Real-time visibility into the UniSI organism. Chemical states, neural activity, and system health at a glance.</p>
+            </div>
+
+            <div class="reveal relative rounded-2xl overflow-hidden glass-strong glow-blue border border-electric-blue/20">
+                <div class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-r from-electric-blue/10 to-neon-cyan/10 flex items-center px-4 gap-2">
+                    <div class="w-3 h-3 rounded-full bg-rose-signal"></div>
+                    <div class="w-3 h-3 rounded-full bg-amber-warm"></div>
+                    <div class="w-3 h-3 rounded-full bg-emerald-core"></div>
+                    <span class="ml-4 font-mono text-xs text-gray-400">unisi_core_dashboard — live</span>
+                </div>
+
+                <div class="p-8 pt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Neural Activity -->
+                    <div class="glass rounded-xl p-6 border border-white/5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-gray-400">NEURAL ACTIVITY</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-core animate-pulse"></span>
+                        </div>
+                        <div class="h-24 flex items-end gap-1">
+                            <div class="flex-1 bg-electric-blue/30 rounded-sm" style="height: 40%"></div>
+                            <div class="flex-1 bg-electric-blue/50 rounded-sm" style="height: 60%"></div>
+                            <div class="flex-1 bg-electric-blue/40 rounded-sm" style="height: 30%"></div>
+                            <div class="flex-1 bg-electric-blue/60 rounded-sm" style="height: 80%"></div>
+                            <div class="flex-1 bg-electric-blue/70 rounded-sm" style="height: 50%"></div>
+                            <div class="flex-1 bg-electric-blue/80 rounded-sm" style="height: 90%"></div>
+                            <div class="flex-1 bg-electric-blue/60 rounded-sm" style="height: 70%"></div>
+                            <div class="flex-1 bg-electric-blue/40 rounded-sm" style="height: 45%"></div>
+                        </div>
+                        <div class="mt-4 font-mono text-2xl font-bold text-electric-blue">94.2%</div>
+                        <div class="text-xs text-gray-500">Signal Integrity</div>
+                    </div>
+
+                    <!-- Chemical State -->
+                    <div class="glass rounded-xl p-6 border border-white/5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-mono text-xs text-gray-400">CHEMICAL STATE</span>
+                            <span class="w-2 h-2 rounded-full bg-neon-cyan animate-pulse"></span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-400">Oxytocin</span>
+                                <div class="w-24 h-2 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-oxytocin-pink w-3/4 rounded-full"></div></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-400">Dopamine</span>
+                                <div class="w-24 h-2 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-dopamine-green w-4/5 rounded-full"></div></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-400">Cortisol</span>
+                                <div class="w-24 h-2 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-cortisol-amber w-1/5 rounded-full"></div></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-400">Serotonin</span>
+                                <div class="w-24 h-2 bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-
